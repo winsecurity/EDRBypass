@@ -48,6 +48,9 @@ namespace sharppractice
                 case "get-domainsid":
                     adenum.f3(args);
                     break;
+                case "get-domaintrust":
+                    adenum.f4(args);
+                    break;
                 default:
                     Console.WriteLine("Invalid command");
                     System.Environment.Exit(0);
