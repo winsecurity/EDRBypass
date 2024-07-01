@@ -147,5 +147,63 @@ namespace sharppractice
         }
 
 
+        public static void f4(string[] args)
+        {
+            // get-domaintrust
+            // get-domaintrust -domain tech69.local -server 10.1.1.1
+
+            cliparse cli = new cliparse();
+            string domain = cli.getargvalue(args, "-domain");
+            string server = cli.getargvalue(args, "-server");
+
+            DirectoryEntry de;
+
+            if(domain is null )
+            {
+                domain = Domain.GetCurrentDomain().Name;
+
+            }
+
+
+            if (!(server is null))
+            {
+                de = new DirectoryEntry(String.Format("LDAP://{0}", server));
+            }
+            else
+            {
+                string[] dcs = domain.Split('.');
+
+                for (int i = 0; i < dcs.Length; i++)
+                {
+                    dcs[i] = "DC=" + dcs[i];
+                    //Console.WriteLine(dcs[i]);
+                }
+                de = new DirectoryEntry(String.Format("LDAP://{0}", String.Join(",", dcs)));
+            }
+
+
+            Domain d = Domain.GetDomain(new DirectoryContext(DirectoryContextType.Domain, domain));
+            foreach(TrustRelationshipInformation trusts in d.GetAllTrustRelationships())
+            {
+                Console.WriteLine("Source domain: {0}",trusts.SourceName);
+                Console.WriteLine("Target domain: {0}",trusts.TargetName);
+                Console.WriteLine("Trust Direction: {0}",trusts.TrustDirection);
+                Console.WriteLine("Trust Type: {0}",trusts.TrustType);
+                Console.WriteLine();
+            }
+
+
+        }
+
+
+        public static void f5(string[] args)
+        {
+            // get-domaintrustmapping
+            // iterate over all domains and get trust relationships
+
+
+        }
+
+
     }
 }
