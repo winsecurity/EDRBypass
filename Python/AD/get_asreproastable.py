@@ -83,6 +83,8 @@ for i in range(0,len(myconnection.entries)):
             for k in uacflags:
                 if k=="DONT_REQ_PREAUTH":
                     print(myconnection.entries[i])
+                    print(uacflags)
+                    print("-"*100)
 
 #print(myconnection)
 
