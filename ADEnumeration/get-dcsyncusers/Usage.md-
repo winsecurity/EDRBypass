@@ -1,0 +1,44 @@
+# Usage of get-dcsyncusers
+
+## This tool can be used to retrieve all the users/groups who have replication/dcsync permissions on DC
+
+## Usage
+`get-dcsyncusers.exe -domaindn "DC=TECH69,DC=LOCAL"`
+
+`get-dcsync.exe  -domaindn DC=TECH69,DC=LOCAL -username test2 -password P@ssw0rd`
+
+`get-dcsync.exe  -domaindn DC=TECH69,DC=LOCAL -server 192.168.0.110 -username test2 -password P@ssw0rd`
+
+## Output 
+```
+Identity Reference: TECH69\test2
+Rights: ExtendedRight
+Access type: Allow
+Right guid: 1131f6aa-9c07-11d1-f79f-00c04fc2dcd2
+Resolved guid name: DS-Replication-Get-Changes
+
+Identity Reference: TECH69\test2
+Rights: ExtendedRight
+Access type: Allow
+Right guid: 89e95b76-444d-4c62-991a-0facbeda640c
+Resolved guid name: DS-Replication-Get-Changes-In-Filtered-Set
+```
+
+Filter only identity refernce if you want
+```
+C:\Users\Administrator\Desktop>get-dcsync.exe  -domaindn DC=TECH69,DC=LOCAL  | findstr /i "identity reference"
+Identity Reference: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+Identity Reference: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+Identity Reference: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+Identity Reference: NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS
+Identity Reference: BUILTIN\Administrators
+Identity Reference: BUILTIN\Administrators
+Identity Reference: BUILTIN\Administrators
+Identity Reference: BUILTIN\Administrators
+Identity Reference: BUILTIN\Administrators
+Identity Reference: TECH69\Enterprise Read-only Domain Controllers
+Identity Reference: TECH69\Domain Controllers
+Identity Reference: TECH69\test2
+Identity Reference: TECH69\test2
+Identity Reference: TECH69\test2
+```
