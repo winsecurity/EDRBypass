@@ -14,7 +14,9 @@ namespace getmygroups
     class Program
     {
 
-
+        public static string username1 = "";
+        public static string password1 = "";
+        public static List<string> mygroups = new List<string>();
         static void checkgroupmembership(PrincipalContext pc,Principal user,List<string> groups)
         {
             
@@ -34,13 +36,28 @@ namespace getmygroups
 
         static void nestedgroups(string groupdn)
         {
+            foreach(string i in mygroups)
+            {
+                if (groupdn == i)
+                {
+
+                    return;
+                }
+            }
+            
             DirectoryEntry de2 = new DirectoryEntry("LDAP://" + groupdn);
+            if (Program.username1 != null && Program.password1 != null)
+            {
+                de2.Username = Program.username1;
+                de2.Password = Program.password1;
+            }
             PropertyValueCollection pvc = de2.Properties["memberOf"];
             if (pvc.Count > 0)
             {
                 foreach (string g in pvc)
                 {
                     Console.WriteLine("[+] {0}",g);
+                    mygroups.Add(g);
                     nestedgroups(g);
                 }
             }
@@ -48,13 +65,28 @@ namespace getmygroups
 
         static void nestedgroupswithip(string groupdn,string ip)
         {
+            foreach (string i in mygroups)
+            {
+
+                if (groupdn ==i)
+                {
+                    return;
+                }
+            }
             DirectoryEntry de2 = new DirectoryEntry(String.Format("LDAP://{0}/{1}" ,ip, groupdn));
+            if (Program.username1 != null && Program.password1 != null)
+            {
+                de2.Username = Program.username1;
+                de2.Password = Program.password1;
+            }
             PropertyValueCollection pvc = de2.Properties["memberOf"];
             if (pvc.Count > 0)
             {
                 foreach (string g in pvc)
                 {
                     Console.WriteLine("[+] {0}", g);
+                    mygroups.Add(g);
+
                     nestedgroupswithip(g,ip);
                 }
             }
@@ -70,10 +102,10 @@ namespace getmygroups
 
             cliparse cli = new cliparse();
 
-            string username = cli.getargvalue(args, "-username");
+            string username = cli.getargvalue(args, "-user");
             if (username == null)
             {
-                Console.WriteLine("Please supply -username [username]");
+                Console.WriteLine("Please supply -user [username]");
                 System.Environment.Exit(0);
             }
 
@@ -83,6 +115,8 @@ namespace getmygroups
 
             string domainname = cli.getargvalue(args, "-domain");
             string serverip = cli.getargvalue(args, "-server");
+            Program.username1 = cli.getargvalue(args, "-username");
+            Program.password1 = cli.getargvalue(args, "-password");
 
             if (domainname == null && serverip == null)
             {
@@ -115,6 +149,11 @@ namespace getmygroups
                 }
                 de = new DirectoryEntry(String.Format("LDAP://{0}", String.Join(",", dcs)));
 
+            }
+            if(Program.username1!=null && Program.password1 != null)
+            {
+                de.Username = Program.username1;
+                de.Password = Program.password1;
             }
 
             DirectorySearcher ds = new DirectorySearcher(de);
