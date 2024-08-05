@@ -115,7 +115,12 @@ namespace get_constrained
             {
                 int uac = Convert.ToInt32(sr.Properties["useraccountcontrol"][0]);
                 string name = sr.Properties["distinguishedname"][0].ToString();
-                Console.WriteLine(name);
+                Console.WriteLine("Name: {0}",name);
+                foreach(var i in sr.Properties["msds-allowedtodelegateto"])
+                {
+                    Console.WriteLine("delegated to: {0}",i);
+                }
+
                 List<string> uacnames = getuacvalues(uac);
                 foreach (string i in uacnames)
                 {
