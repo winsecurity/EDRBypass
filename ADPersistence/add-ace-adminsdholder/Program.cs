@@ -97,27 +97,19 @@ namespace add_ace_adminsdholder
                 DirectoryEntry sdholder =  sr.GetDirectoryEntry();
                 ActiveDirectorySecurity ads = sdholder.ObjectSecurity;
 
-                foreach(ActiveDirectoryAccessRule ar in ads.GetAccessRules(true,true,typeof(NTAccount)))
-                {
-                    //Console.WriteLine(ar.IdentityReference);
-                    //Console.WriteLine(ar.ActiveDirectoryRights);
-                    //Console.WriteLine(ar.AccessControlType);
-                    //Console.WriteLine();
 
 
-                   
+                ds.Filter = "(samaccountname=" + samname + ")";
+                DirectoryEntry user1 = ds.FindOne().GetDirectoryEntry();
 
 
-                }
-
-
-
-                PrincipalContext pc = new PrincipalContext(ContextType.Domain);
-                UserPrincipal user = UserPrincipal.FindByIdentity(pc, samname);
+                //PrincipalContext pc = new PrincipalContext(ContextType.Domain);
+                //UserPrincipal user = UserPrincipal.FindByIdentity(pc, samname);
+                SecurityIdentifier sid1 = new SecurityIdentifier((byte[])user1.Properties["objectsid"].Value, 0);
 
                 if (right.ToLower().Contains("genericall"))
                 {
-                    SecurityIdentifier sid1 = user.Sid;
+
                     ActiveDirectoryAccessRule ar2 = new ActiveDirectoryAccessRule(
                         sid1, ActiveDirectoryRights.GenericAll,
                         AccessControlType.Allow,
@@ -126,11 +118,12 @@ namespace add_ace_adminsdholder
 
                     ads.AddAccessRule(ar2);
                     sdholder.CommitChanges();
+                    Console.WriteLine("Successfully added ace for {0} with right {1} on Adminsdholder",
+                      samname, right);
                 }
 
                 else if (right.ToLower().Contains("genericread"))
                 {
-                    SecurityIdentifier sid1 = user.Sid;
                     ActiveDirectoryAccessRule ar2 = new ActiveDirectoryAccessRule(
                         sid1, ActiveDirectoryRights.GenericRead,
                         AccessControlType.Allow,
@@ -139,11 +132,12 @@ namespace add_ace_adminsdholder
 
                     ads.AddAccessRule(ar2);
                     sdholder.CommitChanges();
+                    Console.WriteLine("Successfully added ace for {0} with right {1} on Adminsdholder",
+                      samname, right);
                 }
 
                 else if (right.ToLower().Contains("genericwrite"))
                 {
-                    SecurityIdentifier sid1 = user.Sid;
                     ActiveDirectoryAccessRule ar2 = new ActiveDirectoryAccessRule(
                         sid1, ActiveDirectoryRights.GenericWrite,
                         AccessControlType.Allow,
@@ -152,12 +146,14 @@ namespace add_ace_adminsdholder
 
                     ads.AddAccessRule(ar2);
                     sdholder.CommitChanges();
+                    Console.WriteLine("Successfully added ace for {0} with right {1} on Adminsdholder",
+                      samname, right);
+
                 }
 
 
                 else if (right.ToLower().Contains("readproperty"))
                 {
-                    SecurityIdentifier sid1 = user.Sid;
                     ActiveDirectoryAccessRule ar2 = new ActiveDirectoryAccessRule(
                         sid1, ActiveDirectoryRights.ReadProperty,
                         AccessControlType.Allow,
@@ -166,12 +162,14 @@ namespace add_ace_adminsdholder
 
                     ads.AddAccessRule(ar2);
                     sdholder.CommitChanges();
+                    Console.WriteLine("Successfully added ace for {0} with right {1} on Adminsdholder",
+                      samname, right);
+
                 }
 
 
                 else if (right.ToLower().Contains("writeproperty"))
                 {
-                    SecurityIdentifier sid1 = user.Sid;
                     ActiveDirectoryAccessRule ar2 = new ActiveDirectoryAccessRule(
                         sid1, ActiveDirectoryRights.WriteProperty,
                         AccessControlType.Allow,
@@ -180,11 +178,12 @@ namespace add_ace_adminsdholder
 
                     ads.AddAccessRule(ar2);
                     sdholder.CommitChanges();
+                    Console.WriteLine("Successfully added ace for {0} with right {1} on Adminsdholder",
+                      samname, right);
                 }
 
                 else if (right.ToLower().Contains("writeowner"))
                 {
-                    SecurityIdentifier sid1 = user.Sid;
                     ActiveDirectoryAccessRule ar2 = new ActiveDirectoryAccessRule(
                         sid1, ActiveDirectoryRights.WriteOwner,
                         AccessControlType.Allow,
@@ -193,11 +192,13 @@ namespace add_ace_adminsdholder
 
                     ads.AddAccessRule(ar2);
                     sdholder.CommitChanges();
+                    Console.WriteLine("Successfully added ace for {0} with right {1} on Adminsdholder",
+                      samname, right);
+
                 }
 
                 else if (right.ToLower().Contains("writedacl"))
                 {
-                    SecurityIdentifier sid1 = user.Sid;
                     ActiveDirectoryAccessRule ar2 = new ActiveDirectoryAccessRule(
                         sid1, ActiveDirectoryRights.WriteDacl,
                         AccessControlType.Allow,
@@ -206,6 +207,10 @@ namespace add_ace_adminsdholder
 
                     ads.AddAccessRule(ar2);
                     sdholder.CommitChanges();
+
+                    Console.WriteLine("Successfully added ace for {0} with right {1} on Adminsdholder",
+                        samname,right);
+
                 }
 
             }
